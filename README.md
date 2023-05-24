@@ -1,2 +1,2 @@
-# di_single_container
+# Dependency Injection example (single container)
 Implementation of dependency injection pattern with a single container

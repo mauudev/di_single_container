@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "di-single-container"
+version = "0.1.0"
+description = "A basic example of dependency injection in Python"
+authors = ["Mau Trigo <mtrigo143@gmail.com>"]
+readme = "README.md"
+packages = [{include = "di_single_container"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dependency-injector = "^4.41.0"
+sqlalchemy = "^2.0.20"
+psycopg2-binary = "^2.9.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

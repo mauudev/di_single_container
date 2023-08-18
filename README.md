@@ -1,4 +1,4 @@
-# Dependency Injection example (single container)
+# Dependency Injection example
 
 Implementation of dependency injection pattern with a single container
 

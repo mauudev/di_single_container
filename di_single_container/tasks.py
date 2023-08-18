@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Callable, ContextManager
 
 from dependency_injector.wiring import Provide, inject
@@ -12,21 +13,28 @@ class Service:
         return "hello!"
 
 
+@dataclass
+class DBCommand:
+    query: str
+
+
 @inject
 def db_op_with_transaction(
+    command: DBCommand,
     db_transaction: ContextManager[Session] = Provide[Container.db_transaction],
 ) -> None:
     with db_transaction as session:
-        result = session.execute(text("SELECT 1"))
+        result = session.execute(text(command.query))
         print(result.scalar())
 
 
 @inject
 def db_op_with_database(
+    command: DBCommand,
     database: ContextManager[Session] = Provide[Container.database],
 ) -> None:
     with database.session() as session:
-        result = session.execute(text("SELECT 2"))
+        result = session.execute(text(command.query))
         print(result.scalar())
 
 
@@ -34,8 +42,8 @@ class TaskBus:
     def __init__(self):
         self.tasks = dict()
 
-    def register_task(self, command: str, task: Callable):
-        self.tasks[command] = task
+    def register_task(self, command: DBCommand, task: Callable):
+        self.tasks[command.__class__.__name__] = task
 
-    def execute(self, command: str):
-        self.tasks[command]()
+    def execute(self, command: DBCommand):
+        self.tasks[command.__class__.__name__](command)
